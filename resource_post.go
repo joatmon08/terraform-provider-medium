@@ -21,6 +21,7 @@ func resourcePost() *schema.Resource {
 }
 
 func resourcePostCreate(d *schema.ResourceData, m interface{}) error {
+	d.SetId("abcd")
 	return resourcePostRead(d, m)
 }
 
@@ -33,5 +34,6 @@ func resourcePostUpdate(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourcePostDelete(d *schema.ResourceData, m interface{}) error {
+	d.SetId("")
 	return nil
 }
