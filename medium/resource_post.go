@@ -1,10 +1,10 @@
-package main
+package medium
 
 import (
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
-func resourcePost() *schema.Resource {
+func ResourcePost() *schema.Resource {
 	return &schema.Resource{
 		Create: resourcePostCreate,
 		Read:   resourcePostRead,

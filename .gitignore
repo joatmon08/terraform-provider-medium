@@ -1,4 +1,5 @@
 .vscode
+local.env
 
 .terraform
 terraform-provider-medium
