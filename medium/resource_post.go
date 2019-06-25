@@ -106,7 +106,7 @@ func resourcePostRead(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourcePostUpdate(d *schema.ResourceData, m interface{}) error {
-	return resourcePostRead(d, m)
+	return resourcePostCreate(d, m)
 }
 
 func resourcePostDelete(d *schema.ResourceData, m interface{}) error {
