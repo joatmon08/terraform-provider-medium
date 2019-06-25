@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestAccConfigLoadValidate_accessToken(t *testing.T) {
+func TestAccConfigLoadValidate(t *testing.T) {
 	config := Config{}
 	err := config.LoadAndValidate()
 	if err != nil {
