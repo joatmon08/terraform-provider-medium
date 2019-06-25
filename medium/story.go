@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 const (
@@ -65,12 +66,13 @@ func (r *ReadEndpoint) GetStory(author_id string, post_id string) (*Story, error
 	defer res.Body.Close()
 
 	response, err := ioutil.ReadAll(res.Body)
+	storyBody := []byte(strings.ReplaceAll(string(response), "])}while(1);</x>", ""))
 	if err != nil {
 		return nil, err
 	}
 
 	var story Story
-	if err := json.Unmarshal(response, &story); err != nil {
+	if err := json.Unmarshal(storyBody, &story); err != nil {
 		return nil, err
 	}
 	return &story, nil

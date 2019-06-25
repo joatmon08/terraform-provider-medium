@@ -12,8 +12,9 @@ const (
 )
 
 type Config struct {
-	Client *medium.Medium
-	User   *medium.User
+	Client       *medium.Medium
+	User         *medium.User
+	ReadEndpoint *ReadEndpoint
 }
 
 func (c *Config) LoadAndValidate() error {
@@ -21,6 +22,11 @@ func (c *Config) LoadAndValidate() error {
 	if len(token) == 0 {
 		return errors.New("define MEDIUM_ACCESS_TOKEN environment variable")
 	}
+	c.ReadEndpoint = &ReadEndpoint{
+		Host:        ReadEndpointHost,
+		AccessToken: token,
+	}
+
 	c.Client = medium.NewClientWithAccessToken(token)
 	user, err := c.Client.GetUser("")
 	if err != nil {

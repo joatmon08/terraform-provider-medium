@@ -13,10 +13,6 @@ func ResourcePost() *schema.Resource {
 		Delete: resourcePostDelete,
 
 		Schema: map[string]*schema.Schema{
-			"post_id": &schema.Schema{
-				Type:     schema.TypeString,
-				Computed: true,
-			},
 			"title": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
@@ -25,37 +21,62 @@ func ResourcePost() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"content_format": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
-			},
 			"publish_status": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
+			},
+			"version": &schema.Schema{
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"revision": &schema.Schema{
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"created_at": &schema.Schema{
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"updated_at": &schema.Schema{
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"published_at": &schema.Schema{
+				Type:     schema.TypeInt,
+				Computed: true,
+			},
+			"has_unpublished_edits": &schema.Schema{
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
+			"medium_url": &schema.Schema{
+				Type:     schema.TypeString,
+				Computed: true,
 			},
 		},
 	}
 }
 
-func resourcePostCreate(d *schema.ResourceData, m interface{}) error {
-	config := m.(*Config)
-	var publishStatus medium.PublishStatus
-
-	switch status := d.Get("publish_status").(string); status {
+func retrievePublishStatus(status string) medium.PublishStatus {
+	publishStatus := medium.PublishStatusDraft
+	switch s := status; s {
 	case medium.PublishStatusPublic:
 		publishStatus = medium.PublishStatusPublic
 	case medium.PublishStatusUnlisted:
 		publishStatus = medium.PublishStatusUnlisted
-	default:
-		publishStatus = medium.PublishStatusDraft
 	}
+	return publishStatus
+}
+
+func resourcePostCreate(d *schema.ResourceData, m interface{}) error {
+	config := m.(*Config)
 
 	options := medium.CreatePostOptions{
 		UserID:        config.User.ID,
 		Title:         d.Get("title").(string),
 		Content:       d.Get("content").(string),
 		ContentFormat: medium.ContentFormatMarkdown,
-		PublishStatus: publishStatus,
+		PublishStatus: retrievePublishStatus(d.Get("publish_status").(string)),
 	}
 
 	post, err := config.Client.CreatePost(options)
@@ -67,6 +88,20 @@ func resourcePostCreate(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourcePostRead(d *schema.ResourceData, m interface{}) error {
+	config := m.(*Config)
+	story, err := config.ReadEndpoint.GetStory(config.User.ID, d.Id())
+	if err != nil {
+		return err
+	}
+	d.Set("user_id", config.User.ID)
+	d.Set("title", story.Payload.Value.Title)
+	d.Set("version", story.Payload.Value.LatestVersion)
+	d.Set("created_at", story.Payload.Value.CreatedAt)
+	d.Set("updated_at", story.Payload.Value.UpdatedAt)
+	d.Set("published_at", story.Payload.Value.LatestPublishedAt)
+	d.Set("revision", story.Payload.Value.LatestRev)
+	d.Set("has_unpublished_edits", story.Payload.Value.HasUnpublishedEdits)
+	d.Set("medium_url", story.Payload.Value.MediumURL)
 	return nil
 }
 

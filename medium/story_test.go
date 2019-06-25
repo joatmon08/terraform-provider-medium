@@ -12,7 +12,7 @@ func TestGetStory(t *testing.T) {
 	authorID := "test"
 	ts := httptest.NewServer(
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			fmt.Fprintln(w, "{\"payload\":{\"value\": {\"id\": \"c19b7de87dc4\",\"versionId\": \"9f984568c5cf\",\"creatorId\": \"699911a5b2ab\",\"homeCollectionId\": \"\", \"title\": \"draft\",\"detectedLanguage\": \"\",\"latestVersion\": \"9f984568c5cf\",\"latestPublishedVersion\": \"\",\"hasUnpublishedEdits\": true}}}")
+			fmt.Fprintln(w, "])}while(1);</x>{\"payload\":{\"value\": {\"id\": \"c19b7de87dc4\",\"versionId\": \"9f984568c5cf\",\"creatorId\": \"699911a5b2ab\",\"homeCollectionId\": \"\", \"title\": \"draft\",\"detectedLanguage\": \"\",\"latestVersion\": \"9f984568c5cf\",\"latestPublishedVersion\": \"\",\"hasUnpublishedEdits\": true}}}")
 		}))
 	defer ts.Close()
 
@@ -25,5 +25,8 @@ func TestGetStory(t *testing.T) {
 	}
 	if story.Payload.Value.ID != storyID {
 		t.Fatalf("story is incorrect: %s", story.Payload.Value.ID)
+	}
+	if story.Payload.Value.HasUnpublishedEdits == false {
+		t.Fatal("story has incorrect unpublished edits")
 	}
 }

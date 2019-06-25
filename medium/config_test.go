@@ -10,4 +10,10 @@ func TestAccConfigLoadValidate(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unable to access api: %s", err)
 	}
+	if config.ReadEndpoint.AccessToken == "" {
+		t.Fatal("access token for read endpoint not set")
+	}
+	if config.ReadEndpoint.Host != ReadEndpointHost {
+		t.Fatalf("incorrect host for read endpoint: %s", config.ReadEndpoint.Host)
+	}
 }

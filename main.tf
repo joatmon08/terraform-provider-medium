@@ -1,3 +1,5 @@
 resource "medium_post" "my-post" {
-    title = "test"
+    title = "hello"
+    content = "world"
+    publish_status = "draft"
 }
