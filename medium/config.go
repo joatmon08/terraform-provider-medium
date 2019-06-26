@@ -23,8 +23,7 @@ func (c *Config) LoadAndValidate() error {
 		return errors.New("define MEDIUM_ACCESS_TOKEN environment variable")
 	}
 	c.ReadEndpoint = &ReadEndpoint{
-		Host:        ReadEndpointHost,
-		AccessToken: token,
+		Host: ReadEndpointHost,
 	}
 
 	c.Client = medium.NewClientWithAccessToken(token)

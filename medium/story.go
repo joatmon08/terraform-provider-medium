@@ -15,8 +15,7 @@ const (
 )
 
 type ReadEndpoint struct {
-	Host        string
-	AccessToken string
+	Host string
 }
 
 type Story struct {
@@ -55,7 +54,6 @@ func (r *ReadEndpoint) GetStory(author_id string, post_id string) (*Story, error
 
 	req.Header.Add("Accept", "text/plain")
 	req.Header.Add("Accept-Charset", "utf-8")
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", r.AccessToken))
 
 	client := &http.Client{}
 
