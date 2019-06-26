@@ -1,10 +1,16 @@
-# Terraform Provider
+# Terraform Provider for Medium
 
+[Medium](https://medium.com) is an online publishing platform. This provider
+allows a Medium user with write API access to write a story in Markdown and
+upload it to Medium.
 
 ## Requirements
 
--   [Terraform](https://www.terraform.io/downloads.html) 0.12.x
--   [Go](https://golang.org/doc/install) 1.12.x (to build the provider plugin)
+- [Terraform](https://www.terraform.io/downloads.html) 0.12.x
+- [Go](https://golang.org/doc/install) 1.12.x (to build the provider plugin)
+- [Developer access to the Medium
+  API](https://github.com/Medium/medium-api-docs#21-browser-based-authentication)
+- [Integration token for your user](https://medium.com/me/settings)    
 
 ## Building The Provider
 
