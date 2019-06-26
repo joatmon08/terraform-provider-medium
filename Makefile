@@ -1,9 +1,14 @@
 build:
 	go build -o terraform-provider-medium
-	terraform init
+	mkdir -p ~/.terraform.d/plugins
+	cp terraform-provider-medium ~/.terraform.d/plugins/
+
+demo:
+	cd example && terraform init
+	cd example && terraform apply
 
 clean:
-	terraform destroy --force
-	rm -rf .terraform
+	cd example && terraform destroy --force
+	cd example && rm -rf .terraform
+	cd example && rm -f terraform.tfstate*
 	rm -f terraform-provider-medium
-	rm -f terraform.tfstate*
