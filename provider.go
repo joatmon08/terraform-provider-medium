@@ -8,7 +8,8 @@ import (
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		ResourcesMap: map[string]*schema.Resource{
-			"medium_post": medium.ResourcePost(),
+			"medium_post":  medium.ResourcePost(),
+			"medium_image": medium.ResourceImage(),
 		},
 		ConfigureFunc: providerConfigure,
 	}

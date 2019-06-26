@@ -5,11 +5,12 @@ import (
 )
 
 type PostBuilder struct {
-	Options *medium.CreatePostOptions
+	PostOptions  *medium.CreatePostOptions
+	ImageOptions *medium.UploadOptions
 }
 
-func (b *PostBuilder) Build(userID string, title string, content string, publish_status string) {
-	b.Options = &medium.CreatePostOptions{
+func (b *PostBuilder) BuildPost(userID string, title string, content string, publish_status string) {
+	b.PostOptions = &medium.CreatePostOptions{
 		UserID:        userID,
 		Title:         title,
 		Content:       content,
@@ -24,7 +25,7 @@ func (b *PostBuilder) Tags(tagsRaw []interface{}) {
 		for i, tag := range tagsRaw {
 			tags[i] = tag.(string)
 		}
-		b.Options.Tags = tags
+		b.PostOptions.Tags = tags
 	}
 }
 
@@ -39,4 +40,11 @@ func retrievePublishStatus(status string) medium.PublishStatus {
 		publishStatus = medium.PublishStatusDraft
 	}
 	return publishStatus
+}
+
+func (b *PostBuilder) BuildImage(filePath string, contentType string) {
+	b.ImageOptions = &medium.UploadOptions{
+		FilePath:    filePath,
+		ContentType: contentType,
+	}
 }

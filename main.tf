@@ -1,6 +1,11 @@
+resource "medium_image" "draft" {
+    file_path = "./images/draft.png"
+    content_type = "image/png"
+}
+
 resource "medium_post" "my-post" {
     title = "Writing a Terraform Medium Provider"
-    content = file("./content.md")
+    content = templatefile("./content.md", { image_url = medium_image.draft.url })
     publish_status = "draft"
     tags = ["terraform", "medium", "automation"]
 }

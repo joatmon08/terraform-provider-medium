@@ -87,10 +87,10 @@ func resourcePostCreate(d *schema.ResourceData, m interface{}) error {
 	publishStatus := d.Get("publish_status").(string)
 	tags := d.Get("tags").([]interface{})
 
-	builder.Build(userID, title, content, publishStatus)
+	builder.BuildPost(userID, title, content, publishStatus)
 	builder.Tags(tags)
 
-	post, err := config.Client.CreatePost(*builder.Options)
+	post, err := config.Client.CreatePost(*builder.PostOptions)
 	if err != nil {
 		return err
 	}

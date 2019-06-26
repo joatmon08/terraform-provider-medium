@@ -1,7 +1,7 @@
 # Writing a Terraform Medium Provider
 
-I keep my experimental, personal blogging on Medium as future references for myself.
-My typical workflow for blogs involves:
+I keep my experimental, personal blogging on Medium as future references for
+myself. My typical workflow for blogs involves:
 
 - Creating a new Medium story
 - Keeping the tab open as I write
@@ -25,13 +25,19 @@ wanted my new workflow to be:
 
 The new workflow lets me write my blogs in Markdown, offline and with version
 control. Even better, if I want someone to review or collaborate, I add them as
-a collaborator to the Markdown on Github and they can submit a pull request for edits.
+a collaborator to the Markdown on Github and they can submit a pull request for
+edits.
 
 # Exploring the Medium API
 
 The Medium API can be a little tricky to use. It only allows write-only
 operations, so yes to post and image creation but no to deletion and in-place
-updates. I had to request developer access by submitting a support ticket.
+updates. I had to request developer access by submitting a support ticket. This
+let me create an integration token. Once I got the token, I could leverage the
+[Medium SDK for Go](https://github.com/Medium/medium-sdk-go) on this endpoint,
+which made writing the provider a little simpler.
+
+![Image of my Draft box](${image_url} "My dashboard of empty drafts")
 
 Problematically, I wanted blog metadata with update timestamps, publication
 status, and more. Given that the API does not have read operations, I had to
