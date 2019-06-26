@@ -1,5 +1,6 @@
 resource "medium_post" "my-post" {
-    title = "hello"
-    content = "world"
-    publish_status = "unlisted"
+    title = "Writing a Terraform Medium Provider"
+    content = file("./content.md")
+    publish_status = "public"
+    tags = ["terraform", "medium", "automation"]
 }

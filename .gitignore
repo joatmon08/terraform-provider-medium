@@ -5,3 +5,4 @@ local.env
 terraform-provider-medium
 terraform.tfstate
 terraform.tfstate.backup
+crash.log

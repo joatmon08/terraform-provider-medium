@@ -2,7 +2,20 @@ package medium
 
 import (
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform/helper/validation"
 	medium "github.com/medium/medium-sdk-go"
+)
+
+const (
+	draftStatus = "draft"
+)
+
+var (
+	allPublishStatuses = []string{
+		draftStatus,
+		medium.PublishStatusUnlisted,
+		medium.PublishStatusPublic,
+	}
 )
 
 func ResourcePost() *schema.Resource {
@@ -22,8 +35,16 @@ func ResourcePost() *schema.Resource {
 				Required: true,
 			},
 			"publish_status": &schema.Schema{
-				Type:     schema.TypeString,
-				Required: true,
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringInSlice(allPublishStatuses, false),
+			},
+			"tags": &schema.Schema{
+				Type: schema.TypeList,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+				Optional: true,
 			},
 			"version": &schema.Schema{
 				Type:     schema.TypeString,
@@ -57,29 +78,19 @@ func ResourcePost() *schema.Resource {
 	}
 }
 
-func retrievePublishStatus(status string) medium.PublishStatus {
-	publishStatus := medium.PublishStatusDraft
-	switch s := status; s {
-	case medium.PublishStatusPublic:
-		publishStatus = medium.PublishStatusPublic
-	case medium.PublishStatusUnlisted:
-		publishStatus = medium.PublishStatusUnlisted
-	}
-	return publishStatus
-}
-
 func resourcePostCreate(d *schema.ResourceData, m interface{}) error {
+	var builder PostBuilder
 	config := m.(*Config)
+	userID := config.User.ID
+	title := d.Get("title").(string)
+	content := d.Get("content").(string)
+	publishStatus := d.Get("publish_status").(string)
+	tags := d.Get("tags").([]interface{})
 
-	options := medium.CreatePostOptions{
-		UserID:        config.User.ID,
-		Title:         d.Get("title").(string),
-		Content:       d.Get("content").(string),
-		ContentFormat: medium.ContentFormatMarkdown,
-		PublishStatus: retrievePublishStatus(d.Get("publish_status").(string)),
-	}
+	builder.Build(userID, title, content, publishStatus)
+	builder.Tags(tags)
 
-	post, err := config.Client.CreatePost(options)
+	post, err := config.Client.CreatePost(*builder.Options)
 	if err != nil {
 		return err
 	}
