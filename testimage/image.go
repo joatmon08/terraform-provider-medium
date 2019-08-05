@@ -2,10 +2,13 @@ package testimage
 
 import (
 	"bytes"
+	"crypto/md5"
+	"encoding/base64"
 	"image"
 	"image/color"
 	"image/draw"
 	"image/png"
+	"strings"
 )
 
 func Create() (*bytes.Buffer, error) {
@@ -18,4 +21,10 @@ func Create() (*bytes.Buffer, error) {
 		return nil, err
 	}
 	return buffer, nil
+}
+
+func GetBase64MD5(file []byte) string {
+	md5sum := md5.Sum(file)
+	md5 := strings.Replace(base64.StdEncoding.EncodeToString(md5sum[:16]), "=", "", -1)
+	return md5
 }

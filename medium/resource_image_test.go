@@ -2,18 +2,26 @@ package medium
 
 import (
 	"fmt"
+	"io/ioutil"
 	"strings"
 	"testing"
+
+	"github.com/joatmon08/terraform-provider-medium/testimage"
 
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
 	"github.com/joatmon08/terraform-provider-medium/readmedium"
 )
 
-func TestAccResourceImage_basic(t *testing.T) {
+func TestAccResourceImage(t *testing.T) {
 	var image readmedium.Image
+	testImage, err := ioutil.ReadFile("resources/test.png")
+	if err != nil {
+		t.Fatalf("could not read test image: %s", err)
+	}
 
 	contentType := "image/png"
+	md5 := testimage.GetBase64MD5(testImage)
 
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
@@ -21,18 +29,19 @@ func TestAccResourceImage_basic(t *testing.T) {
 		CheckDestroy: testAccCheckMediumImageDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckMediumImageConfig_basic(contentType),
+				Config: testAccCheckMediumImageConfig(contentType),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckMediumImageExists("medium_image.test", &image),
 					testAccCheckMediumImageAttributes(&image, contentType),
 					resource.TestCheckResourceAttr("medium_image.test", "content_type", contentType),
+					resource.TestCheckResourceAttr("medium_image.test", "md5", md5),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckMediumImageConfig_basic(contentType string) string {
+func testAccCheckMediumImageConfig(contentType string) string {
 	return fmt.Sprintf(`
 	resource "medium_image" "test" {
 		file_path    = "./resources/test.png"
@@ -63,7 +72,7 @@ func testAccCheckMediumImageExists(n string, image *readmedium.Image) resource.T
 			return err
 		}
 
-		if foundImage.URL == rs.Primary.ID {
+		if foundImage.URL != rs.Primary.ID {
 			return fmt.Errorf("image not found: %s", foundImage.URL)
 		}
 
