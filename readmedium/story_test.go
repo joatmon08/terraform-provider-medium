@@ -1,4 +1,4 @@
-package medium
+package readmedium
 
 import (
 	"fmt"
@@ -16,7 +16,7 @@ func TestGetStory(t *testing.T) {
 		}))
 	defer ts.Close()
 
-	endpoint := ReadEndpoint{
+	endpoint := StoryEndpoint{
 		Host: ts.URL,
 	}
 	story, err := endpoint.GetStory(authorID, storyID)

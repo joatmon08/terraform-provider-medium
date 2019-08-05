@@ -36,7 +36,7 @@ func ResourceImage() *schema.Resource {
 				Computed: true,
 			},
 			"md5": &schema.Schema{
-				Type: schema.TypeString,
+				Type:     schema.TypeString,
 				Computed: true,
 			},
 		},

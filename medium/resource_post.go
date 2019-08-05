@@ -112,7 +112,7 @@ func resourcePostCreate(d *schema.ResourceData, m interface{}) error {
 
 func resourcePostRead(d *schema.ResourceData, m interface{}) error {
 	config := m.(*Config)
-	story, err := config.ReadEndpoint.GetStory(config.User.ID, d.Id())
+	story, err := config.StoryEndpoint.GetStory(config.User.ID, d.Id())
 	if err != nil {
 		return err
 	}

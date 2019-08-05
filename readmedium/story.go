@@ -1,4 +1,4 @@
-package medium
+package readmedium
 
 import (
 	"bytes"
@@ -10,11 +10,11 @@ import (
 )
 
 const (
-	ReadEndpointHost = "https://medium.com"
-	format           = "format=json"
+	MediumURL = "https://medium.com"
+	format    = "format=json"
 )
 
-type ReadEndpoint struct {
+type StoryEndpoint struct {
 	Host string
 }
 
@@ -44,7 +44,7 @@ type Story struct {
 	} `json:"payload"`
 }
 
-func (r *ReadEndpoint) GetStory(author_id string, post_id string) (*Story, error) {
+func (r *StoryEndpoint) GetStory(author_id string, post_id string) (*Story, error) {
 	var body []byte
 	url := fmt.Sprintf("%s/%s/%s?%s", r.Host, author_id, post_id, format)
 	req, err := http.NewRequest("GET", url, bytes.NewReader(body))
@@ -74,22 +74,4 @@ func (r *ReadEndpoint) GetStory(author_id string, post_id string) (*Story, error
 		return nil, err
 	}
 	return &story, nil
-}
-
-func (r *ReadEndpoint) GetImage(image_url string) error {
-	var body []byte
-	url := image_url
-	req, err := http.NewRequest("GET", url, bytes.NewReader(body))
-	if err != nil {
-		return err
-	}
-
-	client := &http.Client{}
-
-	_, err = client.Do(req)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

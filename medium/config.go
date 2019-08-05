@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 
+	read "github.com/joatmon08/terraform-provider-medium/readmedium"
 	medium "github.com/medium/medium-sdk-go"
 )
 
@@ -12,9 +13,9 @@ const (
 )
 
 type Config struct {
-	Client       *medium.Medium
-	User         *medium.User
-	ReadEndpoint *ReadEndpoint
+	Client        *medium.Medium
+	User          *medium.User
+	StoryEndpoint *read.StoryEndpoint
 }
 
 func (c *Config) LoadAndValidate() error {
@@ -22,8 +23,8 @@ func (c *Config) LoadAndValidate() error {
 	if len(token) == 0 {
 		return errors.New("define MEDIUM_ACCESS_TOKEN environment variable")
 	}
-	c.ReadEndpoint = &ReadEndpoint{
-		Host: ReadEndpointHost,
+	c.StoryEndpoint = &read.StoryEndpoint{
+		Host: read.MediumURL,
 	}
 
 	c.Client = medium.NewClientWithAccessToken(token)
