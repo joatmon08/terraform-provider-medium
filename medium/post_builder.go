@@ -9,12 +9,12 @@ type PostBuilder struct {
 	ImageOptions *medium.UploadOptions
 }
 
-func (b *PostBuilder) BuildPost(userID string, title string, content string, publish_status string) {
+func (b *PostBuilder) BuildPost(userID string, title string, content string, content_format string, publish_status string) {
 	b.PostOptions = &medium.CreatePostOptions{
 		UserID:        userID,
 		Title:         title,
 		Content:       content,
-		ContentFormat: medium.ContentFormatMarkdown,
+		ContentFormat: retrieveContentFormat(content_format),
 		PublishStatus: retrievePublishStatus(publish_status),
 	}
 }
@@ -27,6 +27,17 @@ func (b *PostBuilder) Tags(tagsRaw []interface{}) {
 		}
 		b.PostOptions.Tags = tags
 	}
+}
+
+func retrieveContentFormat(format string) medium.ContentFormat {
+	var contentFormat medium.ContentFormat
+	switch f := format; f {
+	case htmlContentFormat:
+		contentFormat = medium.ContentFormatHTML
+	case medium.ContentFormatMarkdown:
+		contentFormat = medium.ContentFormatMarkdown
+	}
+	return contentFormat
 }
 
 func retrievePublishStatus(status string) medium.PublishStatus {

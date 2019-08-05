@@ -27,3 +27,7 @@ For the two types of quotes, you'll need to use HTML tags.
 <blockquote class="graf graf--pullquote graf-after--blockquote graf--trailing is-selected">This is one type of quote.</blockquote>
 
 <blockquote class="graf graf--blockquote graf-after--p">Here is another quote with the vertical line.</blockquote>
+
+# Conclusion
+
+This is an example of the Terraform Provider for Medium.

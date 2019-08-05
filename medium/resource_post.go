@@ -7,7 +7,8 @@ import (
 )
 
 const (
-	draftStatus = "draft"
+	draftStatus       = "draft"
+	htmlContentFormat = "html"
 )
 
 var (
@@ -15,6 +16,11 @@ var (
 		draftStatus,
 		medium.PublishStatusUnlisted,
 		medium.PublishStatusPublic,
+	}
+
+	allContentFormats = []string{
+		htmlContentFormat,
+		medium.ContentFormatMarkdown,
 	}
 )
 
@@ -33,6 +39,11 @@ func ResourcePost() *schema.Resource {
 			"content": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
+			},
+			"content_format": &schema.Schema{
+				Type:         schema.TypeString,
+				Required:     true,
+				ValidateFunc: validation.StringInSlice(allContentFormats, false),
 			},
 			"publish_status": &schema.Schema{
 				Type:         schema.TypeString,
@@ -84,10 +95,11 @@ func resourcePostCreate(d *schema.ResourceData, m interface{}) error {
 	userID := config.User.ID
 	title := d.Get("title").(string)
 	content := d.Get("content").(string)
+	contentFormat := d.Get("content_format").(string)
 	publishStatus := d.Get("publish_status").(string)
 	tags := d.Get("tags").([]interface{})
 
-	builder.BuildPost(userID, title, content, publishStatus)
+	builder.BuildPost(userID, title, content, contentFormat, publishStatus)
 	builder.Tags(tags)
 
 	post, err := config.Client.CreatePost(*builder.PostOptions)

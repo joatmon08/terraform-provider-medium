@@ -6,6 +6,7 @@ resource "medium_image" "draft" {
 resource "medium_post" "my-post" {
     title = "Writing a Terraform Medium Provider"
     content = templatefile("./content.md", { image_url = medium_image.draft.url })
+    content_format = "markdown"
     publish_status = "draft"
     tags = ["terraform", "medium", "automation"]
 }
