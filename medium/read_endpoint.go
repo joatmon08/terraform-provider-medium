@@ -75,3 +75,21 @@ func (r *ReadEndpoint) GetStory(author_id string, post_id string) (*Story, error
 	}
 	return &story, nil
 }
+
+func (r *ReadEndpoint) GetImage(image_url string) error {
+	var body []byte
+	url := image_url
+	req, err := http.NewRequest("GET", url, bytes.NewReader(body))
+	if err != nil {
+		return err
+	}
+
+	client := &http.Client{}
+
+	_, err = client.Do(req)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

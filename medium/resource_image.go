@@ -35,6 +35,10 @@ func ResourceImage() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
+			"md5": &schema.Schema{
+				Type: schema.TypeString,
+				Computed: true,
+			},
 		},
 	}
 }
@@ -50,8 +54,9 @@ func ResourceImageCreate(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return err
 	}
-	d.SetId(image.MD5)
+	d.SetId(image.URL)
 	d.Set("url", image.URL)
+	d.Set("md5", image.MD5)
 	return ResourceImageRead(d, m)
 }
 
