@@ -32,7 +32,6 @@ func TestAccResourceImage(t *testing.T) {
 				Config: testAccCheckMediumImageConfig(contentType),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckMediumImageExists("medium_image.test", &image),
-					testAccCheckMediumImageAttributes(&image, md5, contentType),
 					resource.TestCheckResourceAttr("medium_image.test", "content_type", contentType),
 					resource.TestCheckResourceAttr("medium_image.test", "md5", md5),
 				),
@@ -48,21 +47,6 @@ func testAccCheckMediumImageConfig(contentType string) string {
 		content_type = "%s"
 	}
 	`, contentType)
-}
-
-func testAccCheckMediumImageAttributes(image *readmedium.Image, md5 string, contentType string) resource.TestCheckFunc {
-	return func(s *terraform.State) error {
-
-		if image.MD5 != md5 {
-			return fmt.Errorf("image content does not match: %s", image.MD5)
-		}
-
-		if image.ContentType != contentType {
-			return fmt.Errorf("image content type does not match: %s", image.ContentType)
-		}
-
-		return nil
-	}
 }
 
 func testAccCheckMediumImageDestroy(s *terraform.State) error {
