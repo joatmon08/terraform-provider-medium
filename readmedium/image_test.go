@@ -3,11 +3,11 @@ package readmedium
 import (
 	"crypto/md5"
 	"fmt"
+	"github.com/joatmon08/terraform-provider-medium/testimage"
 	"net/http"
 	"net/http/httptest"
-	"testing"
-	"github.com/joatmon08/terraform-provider-medium/testimage"
 	"strconv"
+	"testing"
 )
 
 func TestGetImage(t *testing.T) {

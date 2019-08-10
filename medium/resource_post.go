@@ -125,6 +125,7 @@ func resourcePostRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("revision", story.Payload.Value.LatestRev)
 	d.Set("has_unpublished_edits", story.Payload.Value.HasUnpublishedEdits)
 	d.Set("medium_url", story.Payload.Value.MediumURL)
+	d.Set("tags", story.Payload.Value.Virtuals.Tags)
 	return nil
 }
 
