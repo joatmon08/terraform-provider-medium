@@ -8,5 +8,4 @@ resource "medium_post" "my-post" {
   content        = templatefile("./content.md", { image_url = medium_image.draft.url })
   content_format = "markdown"
   publish_status = "draft"
-  tags           = ["terraform", "medium", "automation"]
 }

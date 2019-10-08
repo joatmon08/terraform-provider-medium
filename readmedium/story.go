@@ -18,31 +18,26 @@ type StoryEndpoint struct {
 	Host string
 }
 
-type Virtuals struct {
-	Tags []string `json:"tags"`
-}
-
 type Value struct {
-	ID                     string   `json:"id"`
-	VersionID              string   `json:"versionId"`
-	CreatorID              string   `json:"creatorId"`
-	Title                  string   `json:"title"`
-	LatestVersion          string   `json:"latestVersion"`
-	LatestPublishedVersion string   `json:"latestPublishedVersion"`
-	HasUnpublishedEdits    bool     `json:"hasUnpublishedEdits"`
-	LatestRev              int      `json:"latestRev"`
-	CreatedAt              int64    `json:"createdAt"`
-	UpdatedAt              int64    `json:"updatedAt"`
-	AcceptedAt             int      `json:"acceptedAt"`
-	FirstPublishedAt       int      `json:"firstPublishedAt"`
-	LatestPublishedAt      int      `json:"latestPublishedAt"`
-	Visibility             int      `json:"visibility"`
-	License                int      `json:"license"`
-	CanonicalURL           string   `json:"canonicalUrl"`
-	WebCanonicalURL        string   `json:"webCanonicalUrl"`
-	MediumURL              string   `json:"mediumUrl"`
-	Type                   string   `json:"type"`
-	Virtuals               Virtuals `json:"virtuals"`
+	ID                     string `json:"id"`
+	VersionID              string `json:"versionId"`
+	CreatorID              string `json:"creatorId"`
+	Title                  string `json:"title"`
+	LatestVersion          string `json:"latestVersion"`
+	LatestPublishedVersion string `json:"latestPublishedVersion"`
+	HasUnpublishedEdits    bool   `json:"hasUnpublishedEdits"`
+	LatestRev              int    `json:"latestRev"`
+	CreatedAt              int64  `json:"createdAt"`
+	UpdatedAt              int64  `json:"updatedAt"`
+	AcceptedAt             int    `json:"acceptedAt"`
+	FirstPublishedAt       int    `json:"firstPublishedAt"`
+	LatestPublishedAt      int    `json:"latestPublishedAt"`
+	Visibility             int    `json:"visibility"`
+	License                int    `json:"license"`
+	CanonicalURL           string `json:"canonicalUrl"`
+	WebCanonicalURL        string `json:"webCanonicalUrl"`
+	MediumURL              string `json:"mediumUrl"`
+	Type                   string `json:"type"`
 }
 
 type Payload struct {

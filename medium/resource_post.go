@@ -1,8 +1,8 @@
 package medium
 
 import (
-	"github.com/hashicorp/terraform/helper/schema"
-	"github.com/hashicorp/terraform/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	medium "github.com/medium/medium-sdk-go"
 )
 
@@ -50,13 +50,6 @@ func ResourcePost() *schema.Resource {
 				Required:     true,
 				ValidateFunc: validation.StringInSlice(allPublishStatuses, false),
 			},
-			"tags": &schema.Schema{
-				Type: schema.TypeList,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
-				},
-				Optional: true,
-			},
 			"version": &schema.Schema{
 				Type:     schema.TypeString,
 				Computed: true,
@@ -97,10 +90,8 @@ func resourcePostCreate(d *schema.ResourceData, m interface{}) error {
 	content := d.Get("content").(string)
 	contentFormat := d.Get("content_format").(string)
 	publishStatus := d.Get("publish_status").(string)
-	tags := d.Get("tags").([]interface{})
 
 	builder.BuildPost(userID, title, content, contentFormat, publishStatus)
-	builder.Tags(tags)
 
 	post, err := config.Client.CreatePost(*builder.PostOptions)
 	if err != nil {
@@ -125,7 +116,6 @@ func resourcePostRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("revision", story.Payload.Value.LatestRev)
 	d.Set("has_unpublished_edits", story.Payload.Value.HasUnpublishedEdits)
 	d.Set("medium_url", story.Payload.Value.MediumURL)
-	d.Set("tags", story.Payload.Value.Virtuals.Tags)
 	return nil
 }
 

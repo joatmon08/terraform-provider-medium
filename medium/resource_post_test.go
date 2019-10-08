@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hashicorp/terraform/helper/resource"
-	"github.com/hashicorp/terraform/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"github.com/joatmon08/terraform-provider-medium/readmedium"
 )
 
@@ -22,9 +22,6 @@ func TestAccResourcePostMarkdown(t *testing.T) {
 		Payload: readmedium.Payload{
 			Value: readmedium.Value{
 				Title: title,
-				Virtuals: readmedium.Virtuals{
-					Tags: []string{},
-				},
 			},
 		},
 	}
@@ -99,10 +96,6 @@ func testAccCheckMediumPostExists(n string, post *readmedium.Story) resource.Tes
 
 func testAccCheckMediumPostAttributes(post *readmedium.Story, expectedPost *readmedium.Story) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
-
-		if len(post.Payload.Value.Virtuals.Tags) != len(expectedPost.Payload.Value.Virtuals.Tags) {
-			return fmt.Errorf("tags do not match: expected %s, got %s", expectedPost.Payload.Value.Virtuals.Tags, post.Payload.Value.Virtuals.Tags)
-		}
 
 		var config Config
 		if err := config.LoadAndValidate(); err != nil {
