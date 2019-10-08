@@ -28,7 +28,7 @@ func TestAccResourcePostMarkdown(t *testing.T) {
 			},
 		},
 	}
-	
+
 	resource.Test(t, resource.TestCase{
 		PreCheck:     func() { testAccPreCheck(t) },
 		Providers:    testAccProviders,
@@ -81,7 +81,7 @@ func testAccCheckMediumPostExists(n string, post *readmedium.Story) resource.Tes
 		if err := config.LoadAndValidate(); err != nil {
 			return err
 		}
-		
+
 		foundStory, err := config.StoryEndpoint.GetStory(config.User.ID, rs.Primary.ID)
 		if err != nil {
 			return err
@@ -100,7 +100,7 @@ func testAccCheckMediumPostExists(n string, post *readmedium.Story) resource.Tes
 func testAccCheckMediumPostAttributes(post *readmedium.Story, expectedPost *readmedium.Story) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 
-		if (len(post.Payload.Value.Virtuals.Tags) != len(expectedPost.Payload.Value.Virtuals.Tags)) {
+		if len(post.Payload.Value.Virtuals.Tags) != len(expectedPost.Payload.Value.Virtuals.Tags) {
 			return fmt.Errorf("tags do not match: expected %s, got %s", expectedPost.Payload.Value.Virtuals.Tags, post.Payload.Value.Virtuals.Tags)
 		}
 
@@ -110,8 +110,11 @@ func testAccCheckMediumPostAttributes(post *readmedium.Story, expectedPost *read
 		}
 
 		story, err := config.StoryEndpoint.GetStory(config.User.ID, post.Payload.Value.ID)
+		if err != nil {
+			return fmt.Errorf("could not get story: %s", err)
+		}
 
-		if (story.Payload.Value.MediumURL != post.Payload.Value.MediumURL) {
+		if story.Payload.Value.MediumURL != post.Payload.Value.MediumURL {
 			return fmt.Errorf("urls do not match: expected %s, got %s", post.Payload.Value.MediumURL, story.Payload.Value.MediumURL)
 		}
 
